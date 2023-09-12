@@ -1,4 +1,5 @@
-import { db } from "@/firebase/config";
+import { auth, db } from "@/firebase/config";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDocs, collection, where, query, updateDoc } from "firebase/firestore";
 
 export default async function addData(clct: any, id: any, data: any) {
@@ -25,6 +26,20 @@ export async function updateData(clct: any, id: any, data: any) {
         result = await updateDoc(doc(db, clct, id), data, {
             merge: true,
         });
+    } catch (e) {
+        error = e;
+        console.log(e);
+    }
+
+    return { result, error };
+}
+
+export async function login(email: any, password: any) {
+    let result = null;
+    let error = null;
+
+    try {
+        result = await signInWithEmailAndPassword(auth, email, password)
     } catch (e) {
         error = e;
         console.log(e);

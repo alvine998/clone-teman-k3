@@ -9,6 +9,10 @@ type Props = {
 
 export default function Topbar(props: Props) {
     const { open, setOpen } = props
+
+    const handleLogout = async () => {
+        await localStorage.removeItem("uid")
+    }
     return (
         <div className={`w-full ${open ? "h-100 absolute" : "h-20"} transition-all duration-300 p-2 bg-[#15406A] z-40`}>
             <div className='flex justify-between items-center transition-all duration-300'>
@@ -19,7 +23,7 @@ export default function Topbar(props: Props) {
                     <ul className='flex'>
                         <li className='flex items-center px-4 py-2 gap-1'><FaHome className='text-lg text-white' /><a href="/main/dashboard" className="block text-white">Beranda</a></li>
                         <li className='flex items-center px-4 py-2 gap-1'><FaUserFriends className='text-lg text-white' /><a href="/main/member/list" className="block text-white">Personel K3</a></li>
-                        <li className='flex items-center px-4 py-2 gap-1'><a href="/auth/login" className="block text-white">Logout</a></li>
+                        <li className='flex items-center px-4 py-2 gap-1'><a href="/auth/login" onClick={handleLogout} className="block text-white">Logout</a></li>
                     </ul>
                 </div>
                 <button onClick={() => {
@@ -32,7 +36,7 @@ export default function Topbar(props: Props) {
                 <ul>
                     <li className='flex items-center px-4 py-2 gap-1'><FaHome className='text-lg text-white' /><a href="/main/dashboard" className="block text-white">Beranda</a></li>
                     <li className='flex items-center px-4 py-2 gap-1'><FaUserFriends className='text-lg text-white' /><a href="/main/member/list" className="block text-white">Personel K3</a></li>
-                    <li className='flex items-center px-4 py-2 gap-1'><a href="/auth/login" className="block text-white">Logout</a></li>
+                    <li className='flex items-center px-4 py-2 gap-1'><a href="/auth/login" onClick={handleLogout} className="block text-white">Logout</a></li>
                 </ul>
             </div>
         </div>
