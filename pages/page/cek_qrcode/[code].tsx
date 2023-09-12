@@ -77,7 +77,7 @@ export default function Qrcode({ detail }: { detail: any }) {
                 {
                     detail?.length > 0 ?
                         <>
-                            <h1 className='text-[28px] text-[#5a5a5a] text-center font-semibold'>Hasil Scan QRCODE Personel</h1>
+                            <h1 className='text-[26px] text-[#5a5a5a] text-center font-semibold'>Hasil Scan QRCODE Personel</h1>
                             <div className='border-4 sm:border-[7px] sm:rounded-xl border-[#15406A] rounded-lg bg-white mt-2'>
                                 <div className='bg-[#15406A] w-full p-1 mt-2'>
                                     <h1 className='text-center font-semibold text-xl text-white'>BIODATA PERSONEL</h1>
