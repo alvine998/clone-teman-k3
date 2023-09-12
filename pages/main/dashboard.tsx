@@ -84,7 +84,6 @@ export default function list({ table }: { table: any }) {
             name: "Aksi",
             right: false,
             selector: (row: any) => <>
-                <a href={`/page/cek_qrcode/${row?.regis_no}`} className='text-blue-500'>Lihat</a><br />
                 <a href={`/main/member/edit/${row?.regis_no}`} className='text-green-500'>Edit</a><br />
                 <button type='button' onClick={() => {
                     setModal({ ...modal, open: true, data: row, key: "delete" })
@@ -109,45 +108,9 @@ export default function list({ table }: { table: any }) {
     return (
         <Layout>
             <div className='p-2'>
-                <div className='sm:pl-20'>
-                    <h1 className='text-2xl font-semibold '>Data Personel</h1>
+                <div className='bg-green-200 w-full p-10'>
+                    <h1 className='text-lg text-green-800'>Selamat Datang di Dashboard Admin Teman K3</h1>
                 </div>
-                <div className='sm:flex sm:w-1/4 sm:items-start sm:pl-20 pl-0'>
-                    <Button type='button' onClick={() => {
-                        router.push('create')
-                    }}>Tambah Data</Button>
-                </div>
-                <div className='sm:px-20 px-0'>
-                    <DataTable
-                        columns={columns}
-                        data={table}
-                        striped={true}
-                        responsive={true}
-                        highlightOnHover
-                        pointerOnHover
-                    />
-                </div>
-                {
-                    modal.key == "delete" ?
-                        <>
-                            <Modal
-                                open={modal.open}
-                                setOpen={() => setModal({ ...modal, open: false })}
-
-                            >
-                                <div>
-                                    <h1 className='text-center font-bold text-lg'>Hapus Data Personel</h1>
-                                    <form onSubmit={handleDelete}>
-                                        <p className='text-center'>Apakah anda yakin ingin menghapus personel {modal?.data?.name}?</p>
-                                        <div className='my-4'>
-                                            <Button type='submit' color='danger'>Hapus</Button>
-                                            <Button type='button' color='white' onClick={() => { setModal({ ...modal, open: false }) }} >Tutup</Button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </Modal>
-                        </> : ""
-                }
             </div>
         </Layout>
     )

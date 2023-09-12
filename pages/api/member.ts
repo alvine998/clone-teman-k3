@@ -1,5 +1,5 @@
 import { db } from "@/firebase/config";
-import { getFirestore, doc, setDoc, getDocs, collection, where, query } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDocs, collection, where, query, updateDoc } from "firebase/firestore";
 
 export default async function addData(clct: any, id: any, data: any) {
     let result = null;
@@ -7,6 +7,22 @@ export default async function addData(clct: any, id: any, data: any) {
 
     try {
         result = await setDoc(doc(db, clct, id), data, {
+            merge: true,
+        });
+    } catch (e) {
+        error = e;
+        console.log(e);
+    }
+
+    return { result, error };
+}
+
+export async function updateData(clct: any, id: any, data: any) {
+    let result = null;
+    let error = null;
+
+    try {
+        result = await updateDoc(doc(db, clct, id), data, {
             merge: true,
         });
     } catch (e) {

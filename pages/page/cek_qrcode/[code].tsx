@@ -9,10 +9,9 @@ export async function getServerSideProps(context: any) {
         const { code } = context.params
         console.log(context);
         let datas = collection(db, "members")
-        let q = query(datas, where('regis_no', '==', code))
+        let q = query(datas, where('regis_no', '==', code), where('deleted', '==', 0))
         const members = await getDocs(q)
         let a = members.docs.map((doc: any) => doc.data())
-        // console.log(a[0], "rrr");
         return {
             props: {
                 detail: members.docs.map((doc: any) => doc.data()) || []
@@ -62,23 +61,32 @@ export default function Qrcode({ detail }: { detail: any }) {
                 </div>
             </div>
             <div className={`sm:px-20 px-4 p-4 ${open ? "pt-24" : ""} `}>
-                <h1 className='text-[28px] text-[#5a5a5a] text-center font-semibold'>Hasil Scan QRCODE Personel</h1>
-                <div className='border-4 sm:border-[7px] sm:rounded-xl border-[#15406A] rounded-lg bg-white mt-2'>
-                    <div className='bg-[#15406A] w-full p-1 mt-2'>
-                        <h1 className='text-center font-semibold text-xl text-white'>BIODATA PERSONEL</h1>
-                    </div>
-                    <div className='flex flex-col items-center mt-2 mb-4'>
-                        <img alt='photo-user' src={details?.photo} className='w-[150px] h-[200px]' />
-                        <p className='font-bold text-sm mt-1'>Nama: {details?.name}</p>
-                        <p className='font-bold text-sm mt-1'>Tempat Lahir: {details?.birth_place}</p>
-                        <p className='font-bold text-sm mt-1'>Tanggal Lahir: {details?.birth_date}</p>
-                        <p className='font-bold text-sm mt-1'>Jenis Personel: {details?.personel_type || "-"}</p>
-                        <p className='font-bold text-sm mt-1'>Jenis Alat: {details?.tool_type || "-"}</p>
-                        <p className='font-bold text-sm mt-1'>Klasifikasi: {details?.clasification || "-"}</p>
-                        <p className='font-bold text-sm mt-1'>Kelas: {details?.class}</p>
-                        <p className='font-bold text-sm mt-1'>No. Registrasi: {details?.regis_no}</p>
-                    </div>
-                </div>
+                {
+                    detail?.length > 0 ?
+                        <>
+                            <h1 className='text-[28px] text-[#5a5a5a] text-center font-semibold'>Hasil Scan QRCODE Personel</h1>
+                            <div className='border-4 sm:border-[7px] sm:rounded-xl border-[#15406A] rounded-lg bg-white mt-2'>
+                                <div className='bg-[#15406A] w-full p-1 mt-2'>
+                                    <h1 className='text-center font-semibold text-xl text-white'>BIODATA PERSONEL</h1>
+                                </div>
+                                <div className='flex flex-col items-center mt-2 mb-4'>
+                                    <img alt='photo-user' src={details?.photo} className='w-[150px] h-[200px]' />
+                                    <p className='font-bold text-sm mt-1'>Nama: {details?.name}</p>
+                                    <p className='font-bold text-sm mt-1'>Tempat Lahir: {details?.birth_place}</p>
+                                    <p className='font-bold text-sm mt-1'>Tanggal Lahir: {details?.birth_date}</p>
+                                    <p className='font-bold text-sm mt-1'>Jenis Personel: {details?.personel_type || "-"}</p>
+                                    <p className='font-bold text-sm mt-1'>Jenis Alat: {details?.tool_type || "-"}</p>
+                                    <p className='font-bold text-sm mt-1'>Klasifikasi: {details?.clasification || "-"}</p>
+                                    <p className='font-bold text-sm mt-1'>Kelas: {details?.class}</p>
+                                    <p className='font-bold text-sm mt-1'>No. Registrasi: {details?.regis_no}</p>
+                                    <p className='font-bold text-sm mt-1'>Masa Berlaku: {details?.expired_at || "-"}</p>
+                                </div>
+                            </div>
+                        </> :
+                        <div className='bg-red-200 p-2'>
+                            <h1 className='text-[28px] text-red-800 text-center font-semibold'>Data yang Anda Cari Tidak Terdaftar di Database Teman K3</h1>
+                        </div>
+                }
             </div>
             {/* Footer */}
             <div className='mt-2'>

@@ -12,7 +12,7 @@ export default function Button(props: Props) {
         color = 'primary'
     } = props
     return (
-        <div className='my-2'>
+        <div className='my-2 w-full'>
             {
                 color == 'primary' &&
                 <button {...props} className='w-full p-1 bg-green-500 rounded-md text-white'>

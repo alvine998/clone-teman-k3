@@ -7,7 +7,7 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 export default function Input(props: Props) {
     const { label } = props
     return (
-        <div className='my-2 flex flex-col'>
+        <div className='my-2 flex flex-col w-full'>
             {
                 label &&
                 <label htmlFor={label} className='text-gray-500'>{label}</label>
