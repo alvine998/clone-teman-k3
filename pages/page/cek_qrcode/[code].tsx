@@ -24,8 +24,21 @@ export async function getServerSideProps(context: any) {
 
 export default function Qrcode({ detail }: { detail: any }) {
     const [open, setOpen] = useState<boolean>(false);
-    console.log(detail);
     const details = detail?.[0]
+    const months = [
+        {value: 1, label:'Januari'},
+        {value: 2, label:'Februari'},
+        {value: 3, label:'Maret'},
+        {value: 4, label:'April'},
+        {value: 5, label:'Mei'},
+        {value: 6, label:'Juni'},
+        {value: 7, label:'Juli'},
+        {value: 8, label:'Agustus'},
+        {value: 9, label:'September'},
+        {value: 10, label:'Oktober'},
+        {value: 11, label:'November'},
+        {value: 12, label:'Desember'},
+    ]
     return (
         <div className='relative'>
             <div className={`w-full ${open ? "h-100 absolute" : "h-20"} transition-all duration-300 p-2 bg-[#15406A]`}>
@@ -79,7 +92,7 @@ export default function Qrcode({ detail }: { detail: any }) {
                                     <p className='font-bold text-sm mt-1'>Klasifikasi: {details?.clasification || "-"}</p>
                                     <p className='font-bold text-sm mt-1'>Kelas: {details?.class}</p>
                                     <p className='font-bold text-sm mt-1'>No. Registrasi: {details?.regis_no}</p>
-                                    <p className='font-bold text-sm mt-1'>Masa Berlaku: {details?.expired_at || "-"}</p>
+                                    <p className='font-bold text-sm mt-1'>Masa Berlaku: {new Date(details?.expired_at)?.getDate() + " " + months?.find((v:any) => v.value == (new Date(details?.expired_at)?.getMonth() + 1))?.label + " " + new Date(details?.expired_at)?.getFullYear()}</p>
                                 </div>
                             </div>
                         </> :
