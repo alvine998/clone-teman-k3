@@ -39,25 +39,31 @@ export default function Home() {
             <h1 className='text-center font-semibold text-xl text-white'>BIODATA PERSONEL</h1>
           </div>
           <div className='flex flex-col items-center mt-2 mb-4'>
-            <img alt='photo-user' src='https://temank3.kemnaker.go.id/public/uploads/photo/Bintang Siagian-1212051306960002-230623013849.png' className='w-[150px] h-[220px]' />
-            <p className='font-bold text-sm mt-2'>Nama: Tatang Sutisna</p>
-            <p className='font-bold text-sm mt-2'>Tempat Lahir: Sukabumi</p>
-            <p className='font-bold text-sm mt-2'>Tanggal Lahir: 12 Desember 1977</p>
-            <p className='font-bold text-sm mt-2'>Jenis Personel: Juru</p>
-            <p className='font-bold text-sm mt-2'>Jenis Alat: -</p>
-            <p className='font-bold text-sm mt-2'>Klasifikasi: Ahli K3 Bidang Konstruksi dan Bangunan</p>
-            <p className='font-bold text-sm mt-2'>Kelas: Kelas I</p>
-            <p className='font-bold text-sm mt-2'>No. Registrasi: 0000000001</p>
+            <img alt='photo-user' src='https://temank3.kemnaker.go.id/public/uploads/photo/Bintang Siagian-1212051306960002-230623013849.png' className='w-[150px] h-[200px]' />
+            <p className='font-bold text-sm mt-1'>Nama: Tatang Sutisna</p>
+            <p className='font-bold text-sm mt-1'>Tempat Lahir: Sukabumi</p>
+            <p className='font-bold text-sm mt-1'>Tanggal Lahir: 12 Desember 1977</p>
+            <p className='font-bold text-sm mt-1'>Jenis Personel: Juru</p>
+            <p className='font-bold text-sm mt-1'>Jenis Alat: -</p>
+            <p className='font-bold text-sm mt-1'>Klasifikasi: Ahli K3 Bidang Konstruksi dan Bangunan</p>
+            <p className='font-bold text-sm mt-1'>Kelas: Kelas I</p>
+            <p className='font-bold text-sm mt-1'>No. Registrasi: 0000000001</p>
           </div>
         </div>
       </div>
       {/* Footer */}
       <div className='mt-2'>
-        <div className='bg-[#15406A] w-full p-2 fixed bottom-0 left-0'>
+        <div className='bg-[#15406A] w-full p-2'>
           <div className=''>
             <img alt='support' src='https://temank3.kemnaker.go.id/public/themes/website/asset/img/logofooter1.png' className='w-full h-100' />
           </div>
           <p className='text-white text-center'>Jl. Jenderal Gatot Subroto Kav.51, Daerah Khusus Ibukota Jakarta, 12750, Indonesia</p>
+        </div>
+        <div className='bg-black w-full p-5'>
+          <p className='text-white text-center'>Copyright GG &copy; 2020-2023 Ditjen Binwasnaker & K3, Kemnaker R.I.</p>
+        </div>
+        <div className='bg-white w-full p-7'>
+
         </div>
       </div>
     </div>
