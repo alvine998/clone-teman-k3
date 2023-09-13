@@ -8,6 +8,8 @@ import useModal, { Modal } from '@/components/Modal'
 import Input from '@/components/Input'
 import addData from '@/pages/api/member'
 import Swal from 'sweetalert2'
+import { ref, uploadBytesResumable, getDownloadURL, uploadBytes } from 'firebase/storage'
+import { storage } from '@/firebase/config'
 
 export async function getServerSideProps(context: any) {
     try {
@@ -27,7 +29,8 @@ export default function list() {
     const [modal, setModal] = useModal<any>()
     const [imageData, setImageData] = useState<any>({
         preview: null,
-        data: null
+        data: null,
+        url: null
     })
     const router = useRouter();
     const columns: any = [
@@ -54,9 +57,10 @@ export default function list() {
         e.preventDefault();
         const formData: any = Object.fromEntries(new FormData(e.target))
         try {
+
             const payload = {
                 ...formData,
-                photo: imageData?.data,
+                photo: imageData.url,
                 deleted: 0
             }
             const random_id = generateRandomString(20)
@@ -83,18 +87,22 @@ export default function list() {
                         <div className='sm:flex sm:gap-2 sm:justify-between'>
                             <div className='flex justify-center items-center'>
                                 {
-                                    imageData.preview && <img alt='images' src={imageData.preview} className='w-[150px] h-[200px]' />
+                                    imageData.url && <img alt='images' src={imageData.url} className='w-[150px] h-[200px]' />
                                 }
                             </div>
-                            <Input required label='Foto' placeholder='Masukkan Foto' name='photo' type='file' accept='image/*' onChange={(e: any) => {
+                            <Input required label='Foto' placeholder='Masukkan Foto' name='photo' type='file' accept='image/*' onChange={async (e: any) => {
                                 const preview = e.target.files[0]
-                                const reader = new FileReader()
-                                if (preview) {
-                                    reader.onload = (el) => {
-                                        setImageData({ preview: el.target?.result, data: reader.result })
-                                    }
-                                }
-                                reader.readAsDataURL(preview)
+                                const fileName = preview?.name
+                                const storageRef = ref(storage, `/files/${fileName}`);
+                                uploadBytes(storageRef, preview)
+                                    .then(async (snapshot) => {
+                                        console.log('Image uploaded successfully!');
+                                        const url = await getDownloadURL(storageRef)
+                                        setImageData({ url: url })
+                                    })
+                                    .catch((error) => {
+                                        console.error('Error uploading image: ', error);
+                                    });
                             }} />
                         </div>
                         <div className='sm:flex sm:gap-2 sm:justify-between'>

@@ -101,6 +101,7 @@ export default function list({ table }: { table: any }) {
                 deleted: 1
             }
             await updateData('members', modal?.data?.id, payload)
+            setModal({ ...modal, open: false })
             router.push("/main/member/list")
         } catch (error) {
             console.log(error);

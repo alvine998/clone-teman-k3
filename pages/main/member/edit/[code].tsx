@@ -8,8 +8,9 @@ import useModal, { Modal } from '@/components/Modal'
 import Input from '@/components/Input'
 import addData, { updateData } from '@/pages/api/member'
 import { collection, getDocs, query, where } from 'firebase/firestore'
-import { db } from '@/firebase/config'
+import { db, storage } from '@/firebase/config'
 import Swal from 'sweetalert2'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 export async function getServerSideProps(context: any) {
     try {
@@ -34,16 +35,10 @@ export default function edit({ detail }: any) {
     const details = detail?.[0]
     const [imageData, setImageData] = useState<any>({
         preview: details?.photo || null,
-        data: details?.photo || null
+        data: details?.photo || null,
+        url: details?.photo || null
     })
     const router = useRouter();
-    const columns: any = [
-        {
-            name: "Aksi",
-            right: false,
-            selector: (row: any) => <Button color='danger' >Hapus</Button>
-        }
-    ]
 
     const handleUpdate = async (e: any) => {
         e.preventDefault();
@@ -51,7 +46,7 @@ export default function edit({ detail }: any) {
         try {
             const payload = {
                 ...formData,
-                photo: imageData?.data
+                photo: imageData?.url
             }
             await updateData('members', details?.id, payload)
             Swal.fire({
@@ -73,31 +68,45 @@ export default function edit({ detail }: any) {
                 <div>
                     <h1 className='text-center font-bold text-lg'>{router.pathname?.includes("create") ? "Tambah Data Personel" : "Ubah Data Personel"}</h1>
                     <form onSubmit={handleUpdate}>
-                        <div className='flex justify-center items-center'>
-                            {
-                                imageData.preview && <img alt='images' src={imageData.preview} className='w-[150px] h-[200px]' />
-                            }
-                        </div>
-                        <Input required={imageData?.data == null} label='Foto' placeholder='Masukkan Foto' defaultValue={imageData?.data} name='photo' type='file' accept='image/*' onChange={(e: any) => {
-                            const preview = e.target.files[0]
-                            const reader = new FileReader()
-                            if (preview) {
-                                reader.onload = (el) => {
-                                    setImageData({ preview: el.target?.result, data: reader.result })
+                        <div className='sm:flex sm:gap-2 sm:justify-between'>
+                            <div className='flex justify-center items-center'>
+                                {
+                                    imageData.url && <img alt='images' src={imageData.url} className='w-[150px] h-[200px]' />
                                 }
-                            }
-                            reader.readAsDataURL(preview)
-                        }} />
-                        <Input required defaultValue={details?.name} label='Nama' placeholder='Masukkan Nama' name='name' />
-                        <Input required defaultValue={details?.regis_no} label='No Registrasi' placeholder='Masukkan No Registrasi' name='regis_no' />
-                        <Input required defaultValue={details?.birth_place} label='Tempat Lahir' placeholder='Masukkan Tempat Lahir' name='birth_place' />
-                        <Input required defaultValue={details?.birth_date} label='Tanggal Lahir' type='date' placeholder='Masukkan Tanggal Lahir' name='birth_date' />
-                        <Input required defaultValue={details?.personel_type} label='Jenis Personel' placeholder='Masukkan Jenis Personel' name='personel_type' />
-                        <Input defaultValue={details?.tool_type} label='Jenis Alat' placeholder='Masukkan Jenis Alat' name='tool_type' />
-                        <Input required defaultValue={details?.clasification} label='Klasifikasi' placeholder='Masukkan Klasifikasi' name='clasification' />
-                        <Input required defaultValue={details?.class} label='Kelas' placeholder='Masukkan Kelas' name='class' />
-                        <Input required defaultValue={details?.expired_at} label='Masa Berlaku' type='date' name='expired_at' />
-                        <div className='my-4'>
+                            </div>
+                            <Input required={imageData?.data == null} label='Foto' placeholder='Masukkan Foto' defaultValue={imageData?.data} name='photo' type='file' accept='image/*' onChange={(e: any) => {
+                                const preview = e.target.files[0]
+                                const fileName = preview?.name
+                                const storageRef = ref(storage, `/files/${fileName}`);
+                                uploadBytes(storageRef, preview)
+                                    .then(async (snapshot) => {
+                                        console.log('Image uploaded successfully!');
+                                        const url = await getDownloadURL(storageRef)
+                                        setImageData({ url: url })
+                                    })
+                                    .catch((error) => {
+                                        console.error('Error uploading image: ', error);
+                                    });
+                            }} />
+                        </div>
+                        <div className='sm:flex sm:gap-2 sm:justify-between'>
+                            <Input required defaultValue={details?.name} label='Nama' placeholder='Masukkan Nama' name='name' />
+                            <Input required defaultValue={details?.regis_no} label='No Registrasi' placeholder='Masukkan No Registrasi' name='regis_no' />
+                        </div>
+                        <div className='sm:flex sm:gap-2 sm:justify-between'>
+                            <Input required defaultValue={details?.birth_place} label='Tempat Lahir' placeholder='Masukkan Tempat Lahir' name='birth_place' />
+                            <Input required defaultValue={details?.birth_date} label='Tanggal Lahir' type='date' placeholder='Masukkan Tanggal Lahir' name='birth_date' />
+                        </div>
+                        <div className='sm:flex sm:gap-2 sm:justify-between'>
+                            <Input required defaultValue={details?.personel_type} label='Jenis Personel' placeholder='Masukkan Jenis Personel' name='personel_type' />
+                            <Input defaultValue={details?.tool_type} label='Jenis Alat' placeholder='Masukkan Jenis Alat' name='tool_type' />
+                        </div>
+                        <div className='sm:flex sm:gap-2 sm:justify-between'>
+                            <Input required defaultValue={details?.clasification} label='Klasifikasi' placeholder='Masukkan Klasifikasi' name='clasification' />
+                            <Input required defaultValue={details?.class} label='Kelas' placeholder='Masukkan Kelas' name='class' />
+                            <Input required defaultValue={details?.expired_at} label='Masa Berlaku' type='date' name='expired_at' />
+                        </div>
+                        <div className='sm:flex sm:gap-2 sm:justify-between my-4'>
                             <Button type='submit'>Simpan</Button>
                             <Button type='button' color='white' onClick={() => { router.push('/main/member/list') }} >Tutup</Button>
                         </div>
