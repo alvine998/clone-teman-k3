@@ -86,13 +86,13 @@ export default function Qrcode({ detail }: { detail: any }) {
                                     <img alt='photo-user' src={details?.photo} className='w-[150px] h-[200px]' />
                                     <p className='font-bold text-sm mt-1'>Nama: {details?.name}</p>
                                     <p className='font-bold text-sm mt-1'>Tempat Lahir: {details?.birth_place}</p>
-                                    <p className='font-bold text-sm mt-1'>Tanggal Lahir: {new Date(details?.birth_date)?.getDate() + " " + months?.find((v: any) => v.value == (new Date(details?.birth_date)?.getMonth() + 1))?.label + " " + new Date(details?.birth_date)?.getFullYear()}</p>
+                                    <p className='font-bold text-sm mt-1'>Tanggal Lahir: {(new Date(details?.birth_date)?.getDate() < 10 ? (("0" + new Date(details?.birth_date)?.getDate())) : new Date(details?.birth_date)?.getDate()) + " " + months?.find((v: any) => v.value == (new Date(details?.birth_date)?.getMonth() + 1))?.label + " " + new Date(details?.birth_date)?.getFullYear()}</p>
                                     <p className='font-bold text-sm mt-1'>Jenis Personel: {details?.personel_type || "-"}</p>
                                     <p className='font-bold text-sm mt-1'>Jenis Alat: {details?.tool_type || "-"}</p>
                                     <p className='font-bold text-sm mt-1'>Klasifikasi: {details?.clasification || "-"}</p>
                                     <p className='font-bold text-sm mt-1'>Kelas: {details?.class}</p>
                                     <p className='font-bold text-sm mt-1'>No. Registrasi: {details?.regis_no}</p>
-                                    <p className='font-bold text-sm mt-1'>Masa Berlaku: {new Date(details?.expired_at)?.getDate() + " " + months?.find((v: any) => v.value == (new Date(details?.expired_at)?.getMonth() + 1))?.label + " " + new Date(details?.expired_at)?.getFullYear()}</p>
+                                    <p className='font-bold text-sm mt-1'>Masa Berlaku: {(new Date(details?.expired_at)?.getDate() < 10 ? (("0" + new Date(details?.expired_at)?.getDate())) : new Date(details?.expired_at)?.getDate()) + " " + months?.find((v: any) => v.value == (new Date(details?.expired_at)?.getMonth() + 1))?.label + " " + new Date(details?.expired_at)?.getFullYear()}</p>
                                 </div>
                             </div>
                         </> :
