@@ -99,7 +99,9 @@ export default function edit({ detail }: any) {
                         </div>
                         <div className='sm:flex sm:gap-2 sm:justify-between'>
                             <Input required defaultValue={details?.personel_type} label='Jenis Personel' placeholder='Masukkan Jenis Personel' name='personel_type' />
-                            <Input defaultValue={details?.tool_type} label='Jenis Alat' placeholder='Masukkan Jenis Alat' name='tool_type' />
+                            <Input defaultValue={details?.tool_type} label='Jenis Alat' required placeholder='Masukkan Jenis Alat' name='tool_type' />
+                            <Input label='Nama Instansi' defaultValue={details?.instance} required placeholder='Masukkan Nama Instansi' name='instance' />
+
                         </div>
                         <div className='sm:flex sm:gap-2 sm:justify-between'>
                             <Input required defaultValue={details?.clasification} label='Klasifikasi' placeholder='Masukkan Klasifikasi' name='clasification' />

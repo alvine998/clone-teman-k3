@@ -115,7 +115,8 @@ export default function list() {
                         </div>
                         <div className='sm:flex sm:gap-2 sm:justify-between'>
                             <Input required label='Jenis Personel' placeholder='Masukkan Jenis Personel' name='personel_type' />
-                            <Input label='Jenis Alat' placeholder='Masukkan Jenis Alat' name='tool_type' />
+                            <Input label='Jenis Alat' required placeholder='Masukkan Jenis Alat' name='tool_type' />
+                            <Input label='Nama Instansi' required placeholder='Masukkan Nama Instansi' name='instance' />
                         </div>
                         <div className='sm:flex sm:gap-2 sm:justify-between'>
                             <Input required label='Klasifikasi' placeholder='Masukkan Klasifikasi' name='clasification' />

@@ -1,7 +1,7 @@
 import Button from '@/components/Button'
 import Layout from '@/components/Layout'
 import React, { useState } from 'react'
-import DataTable from 'react-data-table-component'
+import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import useModal, { Modal } from '@/components/Modal'
@@ -28,6 +28,8 @@ export async function getServerSideProps(context: any) {
 export default function list({ table }: { table: any }) {
     const [info, setInfo] = useState<any>({ loading: false, message: "" })
     const [modal, setModal] = useModal<any>()
+    const [tabel, setTabel] = useState<any>(table)
+    const [search, setSearch] = useState<any>()
     const router = useRouter();
     const columns: any = [
         {
@@ -92,6 +94,33 @@ export default function list({ table }: { table: any }) {
             </>
         }
     ]
+    const ExpandedComponent: React.FC<ExpanderComponentProps<any>> = ({ data }) => {
+        return (
+            <div className='p-10'>
+                <div className=' flex gap-5'>
+                    <p>Tempat Lahir :</p>
+                    <p>{data?.birth_place}</p>
+                </div>
+                <div className='flex gap-5'>
+                    <p>Tanggal Lahir :</p>
+                    <p>{data?.birth_date}</p>
+                </div>
+                <div className='flex gap-5'>
+                    <p>Klasifikasi :</p>
+                    <p>{data?.clasification}</p>
+                </div>
+                <div className='flex gap-5'>
+                    <p>Jenis Personel :</p>
+                    <p>{data?.personel_type}</p>
+                </div>
+                <div className='flex gap-5'>
+                    <p>Nama Instansi :</p>
+                    <p>{data?.instance}</p>
+                </div>
+            </div>
+        )
+    }
+
     const handleDelete = async (e: any) => {
         e.preventDefault();
         const formData: any = Object.fromEntries(new FormData(e.target))
@@ -113,17 +142,29 @@ export default function list({ table }: { table: any }) {
                 <div className='sm:pl-20'>
                     <h1 className='text-2xl font-semibold '>Data Personel</h1>
                 </div>
-                <div className='sm:flex sm:w-1/4 sm:items-start sm:pl-20 pl-0'>
+                <div className='sm:flex sm:w-1/4 sm:items-start sm:pl-20 pl-0 gap-4'>
                     <Button type='button' onClick={() => {
                         router.push('create')
                     }}>Tambah Data</Button>
+                    <div className='sm:w-[250px]'>
+                        <Input label='' placeholder='Cari disini' value={search} onChange={(e) => {
+                            setSearch(e.target.value.toLowerCase())
+                            if(e.target.value.trim() === ''){
+                                setTabel(table)
+                            } else {
+                                setTabel(tabel.filter((v: any) => v?.name?.toLowerCase()?.includes(e.target.value?.toLowerCase())))
+                            }
+                        }} />
+                    </div>
                 </div>
                 <div className='sm:px-20 px-0'>
                     <DataTable
                         columns={columns}
-                        data={table}
+                        data={tabel}
                         striped={true}
                         responsive={true}
+                        expandableRows
+                        expandableRowsComponent={ExpandedComponent}
                         highlightOnHover
                         pointerOnHover
                     />
