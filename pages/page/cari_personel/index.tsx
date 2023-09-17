@@ -176,7 +176,7 @@ export default function Qrcode({ detail }: { detail: any }) {
                                         <h1 className='text-center font-semibold text-xl text-white'>Cari Personel</h1>
                                     </div>
                                     <div className='mt-5'>
-                                        <form onSubmit={handleSubmit} className='text-center sm:px-20'>
+                                        <form onSubmit={handleSubmit} className='text-center sm:px-20 px-0'>
                                             <Input types='special' label='Nama Peserta' name='name' />
                                             <Input types='special' label='Tanggal Lahir' type='date' name='birth_date' />
                                             <div className='justify-center items-center flex sm:px-[100px] px-36 mt-10'>

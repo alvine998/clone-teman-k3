@@ -10,7 +10,7 @@ export default function Home() {
 
     useEffect(()=>{
       if(router.pathname == "/"){
-        router.push("/auth/login")
+        router.push("/page/cek_personel")
       }
     },[])
 }
