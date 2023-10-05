@@ -1,23 +1,25 @@
 import Button from '@/components/Button'
 import Layout from '@/components/Layout'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable, { ExpanderComponentProps } from 'react-data-table-component'
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import useModal, { Modal } from '@/components/Modal'
 import Input from '@/components/Input'
 import { getData, updateData } from '@/pages/api/member'
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
+import { collection, getDocs, limit, orderBy, query, startAfter, startAt, where } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 
 export async function getServerSideProps(context: any) {
+    const { page, size } = context.query;
     try {
         let datas = collection(db, "members")
-        let q = query(datas, where('deleted', "!=", 1))
-        const members = await getDocs(q)
+        let q = query(datas, where('deleted', "!=", "1"), orderBy('deleted'), orderBy('name'), limit(size))
+        let members = await getDocs(q)
         return {
             props: {
-                table: members.docs.map((doc: any) => { return { ...doc.data(), id: doc.id } }) || []
+                table: members.docs.map((doc: any) => { return { ...doc.data(), id: doc.id } }),
+                table_items: members.docs.map((doc: any) => { return { ...doc.data(), id: doc.id } })?.length || 0,
             }
         }
     } catch (error) {
@@ -25,11 +27,12 @@ export async function getServerSideProps(context: any) {
     }
 }
 
-export default function list({ table }: { table: any }) {
+export default function list({ table, table_items }: any) {
     const [info, setInfo] = useState<any>({ loading: false, message: "" })
     const [modal, setModal] = useModal<any>()
     const [tabel, setTabel] = useState<any>(table)
     const [search, setSearch] = useState<any>()
+    const [show, setShow] = useState<boolean>(false)
     const router = useRouter();
     const columns: any = [
         {
@@ -94,6 +97,10 @@ export default function list({ table }: { table: any }) {
             </>
         }
     ]
+
+    useEffect(() => {
+        setShow(typeof window !== 'undefined')
+    }, [])
     const ExpandedComponent: React.FC<ExpanderComponentProps<any>> = ({ data }) => {
         return (
             <div className='p-10'>
@@ -149,7 +156,7 @@ export default function list({ table }: { table: any }) {
                     <div className='sm:w-[250px]'>
                         <Input label='' placeholder='Cari disini' value={search} onChange={(e) => {
                             setSearch(e.target.value.toLowerCase())
-                            if(e.target.value.trim() === ''){
+                            if (e.target.value.trim() === '') {
                                 setTabel(table)
                             } else {
                                 setTabel(tabel.filter((v: any) => v?.name?.toLowerCase()?.includes(e.target.value?.toLowerCase())))
@@ -158,16 +165,29 @@ export default function list({ table }: { table: any }) {
                     </div>
                 </div>
                 <div className='sm:px-20 px-0'>
-                    <DataTable
-                        columns={columns}
-                        data={tabel}
-                        striped={true}
-                        responsive={true}
-                        expandableRows
-                        expandableRowsComponent={ExpandedComponent}
-                        highlightOnHover
-                        pointerOnHover
-                    />
+                    {
+                        show ?
+                            <DataTable
+                                columns={columns}
+                                data={tabel}
+                                striped={true}
+                                responsive={true}
+                                pagination={true}
+                                paginationServer={true}
+                                paginationDefaultPage={1}
+                                paginationTotalRows={150 || 0}
+                                onChangePage={(pageData: any) => {
+                                    router.push('?page=' + pageData)
+                                }}
+                                onChangeRowsPerPage={(currentRowsPerPage: any, currentPage: any) => {
+                                    router?.push(`?page=${currentPage}&size=${currentRowsPerPage}`)
+                                }}
+                                expandableRows
+                                expandableRowsComponent={ExpandedComponent}
+                                highlightOnHover
+                                pointerOnHover
+                            /> : ""
+                    }
                 </div>
                 {
                     modal.key == "delete" ?
