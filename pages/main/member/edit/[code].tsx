@@ -11,17 +11,19 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db, storage } from '@/firebase/config'
 import Swal from 'sweetalert2'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import axios from 'axios'
 
 export async function getServerSideProps(context: any) {
     try {
         const { code } = context.params
-        let datas = collection(db, "members")
-        let q = query(datas, where('regis_no', '==', code))
-        const members = await getDocs(q)
-        let a = members.docs.map((doc: any) => { return { ...doc.data(), id: doc.id } })
+        const result = await axios.get(`https://api-temank3.vercel.app/members?pagination=true&search=${code}`, {
+            headers: {
+                'bearer-token': 'temank3ku'
+            }
+        })
         return {
             props: {
-                detail: a || []
+                detail: result.data.items.rows || []
             }
         }
     } catch (error) {
@@ -48,7 +50,11 @@ export default function edit({ detail }: any) {
                 ...formData,
                 photo: imageData?.url
             }
-            await updateData('members', details?.id, payload)
+            const result = await axios.post(`https://api-temank3.vercel.app/member`, payload, {
+                headers: {
+                    'bearer-token': 'temank3ku'
+                }
+            })
             Swal.fire({
                 text: "Berhasil menyimpan data",
                 icon: "success"
@@ -89,6 +95,7 @@ export default function edit({ detail }: any) {
                                     });
                             }} />
                         </div>
+                        <input type="text" className='hidden' value={details?.id} name='id' />
                         <div className='sm:flex sm:gap-2 sm:justify-between'>
                             <Input required defaultValue={details?.name} label='Nama' placeholder='Masukkan Nama' name='name' />
                             <Input required defaultValue={details?.regis_no} label='No Registrasi' placeholder='Masukkan No Registrasi' name='regis_no' />

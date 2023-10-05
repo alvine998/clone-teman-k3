@@ -13,10 +13,10 @@ import axios from 'axios'
 import moment from 'moment'
 
 export async function getServerSideProps(context: any) {
-    const { page } = context.query
+    const { page, search } = context.query
     try {
 
-        const result = await axios.get(`https://api-temank3.vercel.app/members?pagination=true&page=${+page - 1}`, {
+        const result = await axios.get(`https://api-temank3.vercel.app/members?pagination=true&page=${page ? (+page - 1) : 0}&search=${search || ""}`, {
             headers: {
                 'bearer-token': 'temank3ku'
             }
@@ -143,11 +143,11 @@ export default function list({ table, table_data }: any) {
         e.preventDefault();
         const formData: any = Object.fromEntries(new FormData(e.target))
         try {
-            const payload = {
-                ...formData,
-                deleted: 1
-            }
-            await updateData('members', modal?.data?.id, payload)
+            const result = await axios.delete(`https://api-temank3.vercel.app/member?id=${formData?.id}`, {
+                headers: {
+                    'bearer-token': 'temank3ku'
+                }
+            })
             setModal({ ...modal, open: false })
             router.push("/main/member/list")
         } catch (error) {
@@ -164,17 +164,12 @@ export default function list({ table, table_data }: any) {
                     <Button type='button' onClick={() => {
                         router.push('create')
                     }}>Tambah Data</Button>
-                    {/* <div className='sm:w-[250px]'>
-                        <Input label='' placeholder='Cari disini' value={search} onChange={(e) => {
-                            setSearch(e.target.value.toLowerCase())
-                            if (e.target.value.trim() === '') {
-                                setTabel(table)
-                            } else {
-                                setTabel(tabel.filter((v: any) => v?.name?.toLowerCase()?.includes(e.target.value?.toLowerCase())))
-                            }
-                        }} />
-                    </div> */}
                 </div>
+                <div className='sm:w-full px-20'>
+                        <Input label='' placeholder='Cari disini' value={search} onChange={(e) => {
+                            router.push(`?search=${e.target.value.toLowerCase()}`)
+                        }} />
+                    </div>
                 <div className='sm:px-20 px-0'>
                     {/* {
                         info.loading ?
@@ -216,6 +211,7 @@ export default function list({ table, table_data }: any) {
                                 <div>
                                     <h1 className='text-center font-bold text-lg'>Hapus Data Personel</h1>
                                     <form onSubmit={handleDelete}>
+                                        <input type="text" className='hidden' value={modal?.data?.id} name='id' />
                                         <p className='text-center'>Apakah anda yakin ingin menghapus personel {modal?.data?.name}?</p>
                                         <div className='my-4'>
                                             <Button type='submit' color='danger'>Hapus</Button>

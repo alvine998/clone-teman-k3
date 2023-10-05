@@ -10,6 +10,7 @@ import addData from '@/pages/api/member'
 import Swal from 'sweetalert2'
 import { ref, uploadBytesResumable, getDownloadURL, uploadBytes } from 'firebase/storage'
 import { storage } from '@/firebase/config'
+import axios from 'axios'
 
 export async function getServerSideProps(context: any) {
     try {
@@ -63,8 +64,11 @@ export default function list() {
                 photo: imageData.url,
                 deleted: 0
             }
-            const random_id = generateRandomString(20)
-            await addData('members', `member-${random_id}`, payload)
+            const result = await axios.post(`https://api-temank3.vercel.app/member`, payload, {
+                headers: {
+                    'bearer-token': 'temank3ku'
+                }
+            })
             Swal.fire({
                 text: "Berhasil menyimpan data",
                 icon: "success"
