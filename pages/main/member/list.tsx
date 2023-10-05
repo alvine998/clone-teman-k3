@@ -9,17 +9,27 @@ import Input from '@/components/Input'
 import { getData, updateData } from '@/pages/api/member'
 import { collection, getDocs, limit, orderBy, query, startAfter, startAt, where } from 'firebase/firestore'
 import { db } from '@/firebase/config'
+import axios from 'axios'
+import moment from 'moment'
 
 export async function getServerSideProps(context: any) {
-    const { page, size } = context.query;
+    const { page } = context.query
     try {
-        let datas = collection(db, "members")
-        let q = query(datas, where('deleted', "!=", "1"), orderBy('deleted'), orderBy('name'), limit(size))
-        let members = await getDocs(q)
+
+        const result = await axios.get(`https://api-temank3.vercel.app/members?pagination=true&page=${+page - 1}`, {
+            headers: {
+                'bearer-token': 'temank3ku'
+            }
+        })
+
         return {
             props: {
-                table: members.docs.map((doc: any) => { return { ...doc.data(), id: doc.id } }),
-                table_items: members.docs.map((doc: any) => { return { ...doc.data(), id: doc.id } })?.length || 0,
+                table: {
+                    total_items: result.data.items.count,
+                    total_pages: result.data.total_pages,
+                    current_page: result.data.current_page
+                },
+                table_data: result.data.items.rows
             }
         }
     } catch (error) {
@@ -27,13 +37,14 @@ export async function getServerSideProps(context: any) {
     }
 }
 
-export default function list({ table, table_items }: any) {
+export default function list({ table, table_data }: any) {
     const [info, setInfo] = useState<any>({ loading: false, message: "" })
     const [modal, setModal] = useModal<any>()
-    const [tabel, setTabel] = useState<any>(table)
+    const [tabel, setTabel] = useState<any>([])
     const [search, setSearch] = useState<any>()
     const [show, setShow] = useState<boolean>(false)
-    const router = useRouter();
+    const router: any = useRouter();
+    let sizes: number = 10
     const columns: any = [
         {
             name: "Nama",
@@ -48,7 +59,7 @@ export default function list({ table, table_items }: any) {
         {
             name: "Tempat, Tanggal Lahir",
             right: false,
-            selector: (row: any) => row?.birth_place + ", " + row?.birth_date
+            selector: (row: any) => row?.birth_place + ", " + moment(row?.birth_date).format("DD-MM-YYYY")
         },
         {
             name: "Jenis Alat",
@@ -73,7 +84,7 @@ export default function list({ table, table_items }: any) {
         {
             name: "Masa Berlaku",
             right: false,
-            selector: (row: any) => row?.expired_at || "-"
+            selector: (row: any) => moment(row?.expired_at).format("DD-MM-YYYY") || "-"
         },
         {
             name: "Foto",
@@ -110,7 +121,7 @@ export default function list({ table, table_items }: any) {
                 </div>
                 <div className='flex gap-5'>
                     <p>Tanggal Lahir :</p>
-                    <p>{data?.birth_date}</p>
+                    <p>{moment(data?.birth_date).format("DD-MM-YYYY")}</p>
                 </div>
                 <div className='flex gap-5'>
                     <p>Klasifikasi :</p>
@@ -153,7 +164,7 @@ export default function list({ table, table_items }: any) {
                     <Button type='button' onClick={() => {
                         router.push('create')
                     }}>Tambah Data</Button>
-                    <div className='sm:w-[250px]'>
+                    {/* <div className='sm:w-[250px]'>
                         <Input label='' placeholder='Cari disini' value={search} onChange={(e) => {
                             setSearch(e.target.value.toLowerCase())
                             if (e.target.value.trim() === '') {
@@ -162,32 +173,37 @@ export default function list({ table, table_items }: any) {
                                 setTabel(tabel.filter((v: any) => v?.name?.toLowerCase()?.includes(e.target.value?.toLowerCase())))
                             }
                         }} />
-                    </div>
+                    </div> */}
                 </div>
                 <div className='sm:px-20 px-0'>
-                    {
-                        show ?
-                            <DataTable
-                                columns={columns}
-                                data={tabel}
-                                striped={true}
-                                responsive={true}
-                                pagination={true}
-                                paginationServer={true}
-                                paginationDefaultPage={1}
-                                paginationTotalRows={150 || 0}
-                                onChangePage={(pageData: any) => {
-                                    router.push('?page=' + pageData)
-                                }}
-                                onChangeRowsPerPage={(currentRowsPerPage: any, currentPage: any) => {
-                                    router?.push(`?page=${currentPage}&size=${currentRowsPerPage}`)
-                                }}
-                                expandableRows
-                                expandableRowsComponent={ExpandedComponent}
-                                highlightOnHover
-                                pointerOnHover
-                            /> : ""
-                    }
+                    {/* {
+                        info.loading ?
+                             : <p className='text-center'>Loading Data....</p>
+                    } */}
+                    <>
+                        {
+                            show ?
+                                <DataTable
+                                    columns={columns}
+                                    data={table_data}
+                                    striped={true}
+                                    responsive={true}
+                                    pagination={true}
+                                    paginationServer={true}
+                                    paginationDefaultPage={1}
+                                    paginationPerPage={10}
+                                    paginationTotalRows={table.total_items}
+                                    onChangePage={(pageData: any) => {
+                                        router?.push(`?page=${pageData}`)
+                                    }}
+                                    progressPending={info.loading}
+                                    expandableRows
+                                    expandableRowsComponent={ExpandedComponent}
+                                    highlightOnHover
+                                    pointerOnHover
+                                /> : ""
+                        }
+                    </>
                 </div>
                 {
                     modal.key == "delete" ?

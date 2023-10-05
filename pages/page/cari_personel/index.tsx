@@ -5,6 +5,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
+import axios from 'axios'
 
 export async function getServerSideProps(context: any) {
     try {
@@ -46,11 +47,12 @@ export default function Qrcode({ detail }: { detail: any }) {
                 name: e.target.name.value,
                 birth_date: e.target.birth_date.value
             }
-            let datas = collection(db, "members")
-            let q = query(datas, where('deleted', "!=", 1), where('name', "==", payload?.name), where('birth_date', '==', payload?.birth_date))
-            const members = await getDocs(q)
-            const result = members.docs?.map((v: any) => { return { ...v.data(), id: v.id } });
-            setMember(result)
+            const result = await axios.get(`https://api-temank3.vercel.app/members?pagination=true&birth_date=${payload?.birth_date}&search=${payload?.name}`, {
+                headers: {
+                    'bearer-token': 'temank3ku'
+                }
+            })
+            setMember(result.data.items.rows)
             setLoading(false)
         } catch (error) {
             console.log(error);

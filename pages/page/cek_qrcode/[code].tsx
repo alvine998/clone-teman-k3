@@ -3,18 +3,19 @@ import { FaHome, FaFlag, FaBook, FaUser } from 'react-icons/fa'
 import { useState } from 'react'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '@/firebase/config'
+import axios from 'axios'
 
 export async function getServerSideProps(context: any) {
     try {
         const { code } = context.params
-        console.log(context);
-        let datas = collection(db, "members")
-        let q = query(datas, where('regis_no', '==', code), where('deleted', '==', 0))
-        const members = await getDocs(q)
-        let a = members.docs.map((doc: any) => doc.data())
+        const result = await axios.get(`https://api-temank3.vercel.app/members?pagination=true&search=${code}`, {
+            headers: {
+                'bearer-token': 'temank3ku'
+            }
+        })
         return {
             props: {
-                detail: members.docs.map((doc: any) => doc.data()) || []
+                detail: result.data.items.rows || []
             }
         }
     } catch (error) {
