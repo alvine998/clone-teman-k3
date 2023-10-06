@@ -50,7 +50,7 @@ export default function edit({ detail }: any) {
                 ...formData,
                 photo: imageData?.url
             }
-            const result = await axios.post(`https://api-temank3.vercel.app/member`, payload, {
+            const result = await axios.patch(`https://api-temank3.vercel.app/member`, payload, {
                 headers: {
                     'bearer-token': 'temank3ku'
                 }
@@ -108,7 +108,6 @@ export default function edit({ detail }: any) {
                             <Input required defaultValue={details?.personel_type} label='Jenis Personel' placeholder='Masukkan Jenis Personel' name='personel_type' />
                             <Input defaultValue={details?.tool_type} label='Jenis Alat' required placeholder='Masukkan Jenis Alat' name='tool_type' />
                             <Input label='Nama Instansi' defaultValue={details?.instance} required placeholder='Masukkan Nama Instansi' name='instance' />
-
                         </div>
                         <div className='sm:flex sm:gap-2 sm:justify-between'>
                             <Input required defaultValue={details?.clasification} label='Klasifikasi' placeholder='Masukkan Klasifikasi' name='clasification' />
