@@ -210,7 +210,7 @@ export default function Qrcode({ detail }: { detail: any }) {
                     <p className='text-white text-center'>Jl. Jenderal Gatot Subroto Kav.51, Daerah Khusus Ibukota Jakarta, 12750, Indonesia</p>
                 </div>
                 <div className='bg-black w-full p-5'>
-                    <p className='text-white text-center font-semibold'>Copyright GG &copy; 2020-2023 Ditjen Binwasnaker & K3, Kemnaker R.I.</p>
+                    <p className='text-white text-center font-semibold'>Copyright GG &copy; 2020-2024 Ditjen Binwasnaker & K3, Kemnaker R.I.</p>
                 </div>
             </div>
         </div>
