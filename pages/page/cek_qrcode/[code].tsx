@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import axios from 'axios'
+import Image from 'next/image'
 
 export async function getServerSideProps(context: any) {
     try {
@@ -40,6 +41,18 @@ export default function Qrcode({ detail }: { detail: any }) {
         { value: 11, label: 'November' },
         { value: 12, label: 'Desember' },
     ]
+
+    const keys = [
+        { label: "Nama", value: details?.name },
+        { label: "Tempat Lahir", value: details?.birth_place },
+        { label: "Tanggal Lahir", value: details?.birth_date },
+        { label: "Jenis Personel", value: details?.personel_type },
+        { label: "Jenis Alat", value: details?.tool_type },
+        { label: "Klasifikasi", value: details?.clasification },
+        { label: "No Registrasi", value: details?.regis_no },
+        { label: "Kelas", value: details?.class },
+        { label: "Masa Berlaku", value: details?.expired_at }
+    ]
     return (
         <div className='relative'>
             <div className={`w-full ${open ? "h-100 absolute" : "h-20"} transition-all duration-300 p-2 bg-[#15406A]`}>
@@ -74,18 +87,38 @@ export default function Qrcode({ detail }: { detail: any }) {
                     </ul>
                 </div>
             </div>
-            <div className={`sm:px-20 px-4 p-4 ${open ? "pt-24" : ""} `}>
+            <div className={`lg:px-[35%] px-4 p-4 ${open ? "pt-24" : ""} `}>
                 {
                     detail?.length > 0 ?
                         <>
-                            <h1 className='text-[26px] text-[#5a5a5a] text-center font-semibold'>Hasil Scan QRCODE Personel</h1>
+                            <h1 className='text-[26px] text-[#5a5a5a] text-center font-semibold'>Hasil Scan QR Personil</h1>
                             <div className='border-4 sm:border-[7px] sm:rounded-xl border-[#15406A] rounded-lg bg-white mt-2'>
-                                <div className='bg-[#15406A] w-full p-1 mt-2'>
-                                    <h1 className='text-center font-semibold text-xl text-white'>BIODATA PERSONEL</h1>
+                                <div className='bg-[#15406A] w-full lg:h-auto p-3 -mt-1'>
+                                    <img src="https://temank3.kemnaker.go.id/public/themes/website/asset/img/logo.png" alt="logo" className='w-[170px] h-[58px]' />
+                                    {/* <h1 className='text-center font-semibold text-xl text-white'>BIODATA PERSONIL</h1> */}
                                 </div>
-                                <div className='flex flex-col items-center mt-2 mb-4'>
-                                    <img alt='photo-user' src={details?.photo} className='w-[150px] h-[200px]' />
-                                    <p className='font-bold text-sm mt-1'>Nama: {details?.name}</p>
+                                <Image alt='card' src={'/topper2.png'} layout='relative' width={500} height={300} className='w-full h-auto -mt-1' />
+                                <div className='-mt-10 mb-4'>
+                                    <div className='flex justify-center items-center'>
+                                        <img alt='photo-user' src={details?.photo} className='w-[150px] h-[200px]' />
+                                    </div>
+                                    <div className='flex justify-between'>
+                                        <div className='flex flex-col gap-2 pl-5 mt-5'>
+                                            {
+                                                keys?.map((item: any) => (
+                                                    <p className='font-bold text-sm uppercase'>{item?.label}</p>
+                                                ))
+                                            }
+                                        </div>
+                                        <div className='flex flex-col gap-2 pl-5 mt-5'>
+                                            {
+                                                keys?.map((item: any) => (
+                                                    <p className={`font-bold text-[#15406A] text-sm lg:mr-28 mr-14 ${item?.label == "Jenis Personel" ? "" : item?.label == "Kelas" ? "" : item?.label == "Klasifikasi" ? "" : "uppercase"}`}>: {item?.value}</p>
+                                                ))
+                                            }
+                                        </div>
+                                    </div>
+                                    {/* <p className='font-bold text-sm mt-1'>Nama: {details?.name}</p>
                                     <p className='font-bold text-sm mt-1'>Tempat Lahir: {details?.birth_place}</p>
                                     <p className='font-bold text-sm mt-1'>Tanggal Lahir: {(new Date(details?.birth_date)?.getDate() < 10 ? (("0" + new Date(details?.birth_date)?.getDate())) : new Date(details?.birth_date)?.getDate()) + " " + months?.find((v: any) => v.value == (new Date(details?.birth_date)?.getMonth() + 1))?.label + " " + new Date(details?.birth_date)?.getFullYear()}</p>
                                     <p className='font-bold text-sm mt-1'>Jenis Personel: {details?.personel_type || "-"}</p>
@@ -93,8 +126,9 @@ export default function Qrcode({ detail }: { detail: any }) {
                                     <p className='font-bold text-sm mt-1'>Klasifikasi: {details?.clasification || "-"}</p>
                                     <p className='font-bold text-sm mt-1'>Kelas: {details?.class}</p>
                                     <p className='font-bold text-sm mt-1'>No. Registrasi: {details?.regis_no}</p>
-                                    <p className='font-bold text-sm mt-1'>Masa Berlaku: {(new Date(details?.expired_at)?.getDate() < 10 ? (("0" + new Date(details?.expired_at)?.getDate())) : new Date(details?.expired_at)?.getDate()) + " " + months?.find((v: any) => v.value == (new Date(details?.expired_at)?.getMonth() + 1))?.label + " " + new Date(details?.expired_at)?.getFullYear()}</p>
+                                    <p className='font-bold text-sm mt-1'>Masa Berlaku: {(new Date(details?.expired_at)?.getDate() < 10 ? (("0" + new Date(details?.expired_at)?.getDate())) : new Date(details?.expired_at)?.getDate()) + " " + months?.find((v: any) => v.value == (new Date(details?.expired_at)?.getMonth() + 1))?.label + " " + new Date(details?.expired_at)?.getFullYear()}</p> */}
                                 </div>
+                                <Image alt='card' src={'/bottom-remove.png'} layout='relative' width={500} height={300} className='w-full h-auto -mt-28' />
                             </div>
                         </> :
                         <div className='bg-red-200 p-2'>
