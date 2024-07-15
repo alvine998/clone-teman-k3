@@ -91,14 +91,16 @@ export default function Qrcode({ detail }: { detail: any }) {
                 {
                     detail?.length > 0 ?
                         <>
-                            <h1 className='text-[26px] text-[#5a5a5a] text-center font-semibold'>Hasil Scan QR Personil</h1>
-                            <div className='border-4 sm:border-[7px] sm:rounded-xl border-[#15406A] rounded-lg bg-white mt-2'>
-                                <div className='bg-[#15406A] w-full lg:h-auto p-3 -mt-1'>
+                            <h1 className='text-[26px] text-[#15406A] text-center font-semibold'>Hasil Scan QR Personil</h1>
+                            <div className='border-4 sm:border-[7px] sm:rounded-xl border-[#15406A] rounded-lg bg-white mt-2 relative'>
+                                <div className='bg-[#15406A] w-full lg:h-auto p-3 lg:-mt-1 -mt-0 relative z-20'>
                                     <img src="https://temank3.kemnaker.go.id/public/themes/website/asset/img/logo.png" alt="logo" className='w-[170px] h-[58px]' />
                                     {/* <h1 className='text-center font-semibold text-xl text-white'>BIODATA PERSONIL</h1> */}
                                 </div>
-                                <Image alt='card' src={'/topper2.png'} layout='relative' width={500} height={300} className='w-full h-auto -mt-1' />
-                                <div className='-mt-10 mb-4'>
+                                <div className='relative z-20 -mt-1'>
+                                    <Image alt='card' src={'/topper2.png'} layout='relative' width={500} height={300} className='w-full h-auto' />
+                                </div>
+                                <div className='relative -mt-10 mb-4 z-20'>
                                     <div className='flex justify-center items-center'>
                                         <img alt='photo-user' src={details?.photo} className='w-[150px] h-[200px]' />
                                     </div>
@@ -128,7 +130,10 @@ export default function Qrcode({ detail }: { detail: any }) {
                                     <p className='font-bold text-sm mt-1'>No. Registrasi: {details?.regis_no}</p>
                                     <p className='font-bold text-sm mt-1'>Masa Berlaku: {(new Date(details?.expired_at)?.getDate() < 10 ? (("0" + new Date(details?.expired_at)?.getDate())) : new Date(details?.expired_at)?.getDate()) + " " + months?.find((v: any) => v.value == (new Date(details?.expired_at)?.getMonth() + 1))?.label + " " + new Date(details?.expired_at)?.getFullYear()}</p> */}
                                 </div>
-                                <Image alt='card' src={'/bottom-remove.png'} layout='relative' width={500} height={300} className='w-full h-auto -mt-28' />
+                                <div className='z-10 absolute top-0 w-full h-full'>
+                                    <Image alt='bg' src={'/bg-22.png'} layout='responsive' width={500} height={500} className='w-full h-auto' />
+                                </div>
+                                <Image alt='card' src={'/bottom-remove.png'} layout='responsive' width={500} height={300} className='w-full h-auto -mt-28' />
                             </div>
                         </> :
                         <div className='bg-red-200 p-2'>
