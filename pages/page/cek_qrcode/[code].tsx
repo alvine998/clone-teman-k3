@@ -131,9 +131,11 @@ export default function Qrcode({ detail }: { detail: any }) {
                                     <p className='font-bold text-sm mt-1'>Masa Berlaku: {(new Date(details?.expired_at)?.getDate() < 10 ? (("0" + new Date(details?.expired_at)?.getDate())) : new Date(details?.expired_at)?.getDate()) + " " + months?.find((v: any) => v.value == (new Date(details?.expired_at)?.getMonth() + 1))?.label + " " + new Date(details?.expired_at)?.getFullYear()}</p> */}
                                 </div>
                                 <div className='z-10 absolute top-0 w-full h-full'>
-                                    <Image alt='bg' src={'/bg-22.png'} layout='responsive' width={500} height={500} className='w-full h-auto' />
+                                    <Image alt='bg' src={'/bg-22.png'} layout='responsive' width={500} height={300} className='w-full h-auto' />
                                 </div>
-                                <Image alt='card' src={'/bottom-remove.png'} layout='responsive' width={500} height={300} className='w-full h-auto -mt-28' />
+                                <div className='relative z-20'>
+                                    <Image alt='card' src={'/bottom-remove.png'} layout='responsive' width={500} height={300} className='w-full h-auto -mt-28' />
+                                </div>
                             </div>
                         </> :
                         <div className='bg-red-200 p-2'>
