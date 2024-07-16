@@ -115,7 +115,7 @@ export default function Qrcode({ detail }: { detail: any }) {
                                         <div className='flex flex-col gap-2 pl-5 mt-5'>
                                             {
                                                 keys?.map((item: any) => (
-                                                    <p className={`font-bold text-[#15406A] text-sm lg:mr-28 mr-14 ${item?.label == "Jenis Personel" ? "" : item?.label == "Kelas" ? "" : item?.label == "Klasifikasi" ? "" : "uppercase"}`}>: {item?.value}</p>
+                                                    <p className={`font-bold text-[#15406A] mr-14 ${item?.value?.length > 20  ? "text-sm lg:mr-10" : "text-sm lg:mr-28"} ${item?.label == "Jenis Personel" ? "" : item?.label == "Kelas" ? "" : item?.label == "Klasifikasi" ? "" : "uppercase"}`}>: {item?.value}</p>
                                                 ))
                                             }
                                         </div>
