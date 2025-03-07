@@ -64,7 +64,7 @@ export default function list() {
                 photo: imageData.url,
                 deleted: 0
             }
-            const result = await axios.post(`https://api-temank3.vercel.app/member`, payload, {
+            const result = await axios.post(`https://temank3-api.asbinews.com/member`, payload, {
                 headers: {
                     'bearer-token': 'temank3ku'
                 }

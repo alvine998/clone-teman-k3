@@ -47,7 +47,7 @@ export default function Qrcode({ detail }: { detail: any }) {
                 name: e.target.name.value,
                 birth_date: e.target.birth_date.value
             }
-            const result = await axios.get(`https://api-temank3.vercel.app/members?pagination=true&birth_date=${payload?.birth_date}&search=${payload?.name}`, {
+            const result = await axios.get(`https://temank3-api.asbinews.com/members?pagination=true&birth_date=${payload?.birth_date}&search=${payload?.name}`, {
                 headers: {
                     'bearer-token': 'temank3ku'
                 }

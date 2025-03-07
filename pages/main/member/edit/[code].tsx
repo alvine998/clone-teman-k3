@@ -16,7 +16,7 @@ import axios from 'axios'
 export async function getServerSideProps(context: any) {
     try {
         const { code } = context.params
-        const result = await axios.get(`https://api-temank3.vercel.app/members?pagination=true&search=${code}`, {
+        const result = await axios.get(`https://temank3-api.asbinews.com/members?pagination=true&search=${code}`, {
             headers: {
                 'bearer-token': 'temank3ku'
             }
@@ -50,7 +50,7 @@ export default function edit({ detail }: any) {
                 ...formData,
                 photo: imageData?.url
             }
-            const result = await axios.patch(`https://api-temank3.vercel.app/member`, payload, {
+            const result = await axios.patch(`https://temank3-api.asbinews.com/member`, payload, {
                 headers: {
                     'bearer-token': 'temank3ku'
                 }
