@@ -11,12 +11,13 @@ import { collection, getDocs, limit, orderBy, query, startAfter, startAt, where 
 import { db } from '@/firebase/config'
 import axios from 'axios'
 import moment from 'moment'
+import { CONFIG } from '@/config'
 
 export async function getServerSideProps(context: any) {
     const { page, search } = context.query
     try {
 
-        const result = await axios.get(`https://temank3-api.asbinews.com/members?pagination=true&page=${page ? (+page - 1) : 0}&search=${search || ""}`, {
+        const result = await axios.get(`${CONFIG.base_url_api}/members?pagination=true&page=${page ? (+page - 1) : 0}&search=${search || ""}`, {
             headers: {
                 'bearer-token': 'temank3ku'
             }
@@ -143,7 +144,7 @@ export default function list({ table, table_data }: any) {
         e.preventDefault();
         const formData: any = Object.fromEntries(new FormData(e.target))
         try {
-            const result = await axios.delete(`https://temank3-api.asbinews.com/member?id=${formData?.id}`, {
+            const result = await axios.delete(`${CONFIG.base_url_api}/member?id=${formData?.id}`, {
                 headers: {
                     'bearer-token': 'temank3ku'
                 }

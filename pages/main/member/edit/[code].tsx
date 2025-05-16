@@ -12,11 +12,12 @@ import { db, storage } from '@/firebase/config'
 import Swal from 'sweetalert2'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import axios from 'axios'
+import { CONFIG } from '@/config'
 
 export async function getServerSideProps(context: any) {
     try {
         const { code } = context.params
-        const result = await axios.get(`https://temank3-api.asbinews.com/members?pagination=true&search=${code}`, {
+        const result = await axios.get(`${CONFIG.base_url_api}/members?pagination=true&search=${code}`, {
             headers: {
                 'bearer-token': 'temank3ku'
             }
@@ -50,7 +51,7 @@ export default function edit({ detail }: any) {
                 ...formData,
                 photo: imageData?.url
             }
-            const result = await axios.patch(`https://temank3-api.asbinews.com/member`, payload, {
+            const result = await axios.patch(`${CONFIG.base_url_api}/member`, payload, {
                 headers: {
                     'bearer-token': 'temank3ku'
                 }

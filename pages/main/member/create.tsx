@@ -11,6 +11,7 @@ import Swal from 'sweetalert2'
 import { ref, uploadBytesResumable, getDownloadURL, uploadBytes } from 'firebase/storage'
 import { storage } from '@/firebase/config'
 import axios from 'axios'
+import { CONFIG } from '@/config'
 
 export async function getServerSideProps(context: any) {
     try {
@@ -64,7 +65,7 @@ export default function list() {
                 photo: imageData.url,
                 deleted: 0
             }
-            const result = await axios.post(`https://temank3-api.asbinews.com/member`, payload, {
+            const result = await axios.post(`${CONFIG.base_url_api}/member`, payload, {
                 headers: {
                     'bearer-token': 'temank3ku'
                 }

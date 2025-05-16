@@ -6,6 +6,7 @@ import { db } from '@/firebase/config'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
 import axios from 'axios'
+import { CONFIG } from '@/config'
 
 export async function getServerSideProps(context: any) {
     try {
@@ -47,7 +48,7 @@ export default function Qrcode({ detail }: { detail: any }) {
                 name: e.target.name.value,
                 birth_date: e.target.birth_date.value
             }
-            const result = await axios.get(`https://temank3-api.asbinews.com/members?pagination=true&birth_date=${payload?.birth_date}&search=${payload?.name}`, {
+            const result = await axios.get(`${CONFIG.base_url_api}/members?pagination=true&birth_date=${payload?.birth_date}&search=${payload?.name}`, {
                 headers: {
                     'bearer-token': 'temank3ku'
                 }
